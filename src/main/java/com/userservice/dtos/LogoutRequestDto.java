@@ -1,2 +1,10 @@
-package com.userservice.dtos;public class LogoutRequestDto {
+package com.userservice.dtos;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class LogoutRequestDto {
+    private String token;
 }
