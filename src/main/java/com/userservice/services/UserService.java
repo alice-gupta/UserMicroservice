@@ -1,6 +1,7 @@
 package com.userservice.services;
 
 import com.userservice.exception.InvalidPasswordException;
+import com.userservice.exception.InvalidTokenException;
 import com.userservice.models.Token;
 import com.userservice.models.User;
 import com.userservice.repositories.TokenRepository;
@@ -8,6 +9,8 @@ import com.userservice.repositories.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -100,6 +103,15 @@ public class UserService {
         tokenRepository.save(token);
 
         return;
+    }
+
+
+    public User validateToken( String tokenValue) throws InvalidTokenException {
+     Optional<Token> optionalToken=tokenRepository.findByValueAndDeleted(tokenValue,false);
+     if(optionalToken.isEmpty()){
+         throw new InvalidTokenException("Invalid Token Passed");
+     }
+        return optionalToken.get().getUser();
     }
 
 }
